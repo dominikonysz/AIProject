@@ -42,8 +42,9 @@ public class Vector2 {
      * Sets the x coordinate to a new given value
      * @param newX 
      */
-    public void setX(double newX) {
+    public Vector2 setX(double newX) {
         x = newX;
+        return this;
     }
     
     /**
@@ -73,8 +74,9 @@ public class Vector2 {
      * Sets the y coordinate to new given value
      * @param newY 
      */
-    public void setY(double newY) {
+    public Vector2 setY(double newY) {
         y = newY;
+        return this;
     }
     
     /**

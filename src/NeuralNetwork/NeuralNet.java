@@ -185,9 +185,9 @@ public class NeuralNet {
         
         // Probabilities
         double probAddNeuron = 0.6;
-            double probNewLayerNeuron = 0.3;
-        double probRemoveNeuron = 0.2;
-        double probAddConnection = 0.8;
+            double probNewLayerNeuron = 0.2;
+        double probRemoveNeuron = 0.5;
+        double probAddConnection = 0.85;
             double probBiasConnection = 0.15;
         double probRemoveConnection = 0.3;
         double probModifyWeights = 0.7;

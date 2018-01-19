@@ -18,7 +18,7 @@ import NeuralNetwork.NetworkVisualization;
 public class JAR_AIPlayer {
     
     private NeuralNet nn;
-    private int[] view;
+    private int[] view, parsedView;
     private JAR_Game game;
     
     private Player player;
@@ -30,11 +30,13 @@ public class JAR_AIPlayer {
     private int[] lastOut;
     private Vector2 travelledDistance;
     private int timeNeeded;
+    private int inputBounds = 7;
     
     public JAR_AIPlayer() {
-        nn = new NeuralNet(15 * 15, new ArrayList(), 3);
+        nn = new NeuralNet(inputBounds * inputBounds, new ArrayList(), 3);
         this.game = JAR_Game.getGame();
         view = new int[15 * 15];
+        parsedView = new int[inputBounds * inputBounds];
         
         player = game.getPlayer();
         bestPosX = player.getPosition().getX();
@@ -52,6 +54,7 @@ public class JAR_AIPlayer {
         this.game = JAR_Game.getGame();
         
         view = new int[15 * 15];
+        parsedView = new int[inputBounds * inputBounds];
         
         nn = base.getNeuralNet().getCopy();
         nn.mutate(0.7);
@@ -95,6 +98,23 @@ public class JAR_AIPlayer {
     }
     
     /**
+     * Returns a decreased version of the players view to ignore unrelevant blocks that are too far away
+     * 
+     * the new bounds need to be uneven to be able to recognize the player as the center
+     */
+    public int[] parseView(int newBound) {
+        int viewBound = (int) Math.sqrt(view.length); // the view is quadratic
+        int[] output = new int[newBound * newBound];
+        int start = (viewBound - newBound) / 2;
+        for (int y = 0; y < newBound; y++) {
+            for (int x = 0; x < newBound; x++) {
+                output[x + y * newBound] = view[start + x + (start + y) * viewBound];
+            }
+        }
+        return output;
+    }
+    
+    /**
      * Computes what actions the player should do by computing an output from the
      * players neural net with the player view as input
      */
@@ -104,8 +124,7 @@ public class JAR_AIPlayer {
         
         Vector2 playerPos = player.getPosition();
         
-        travelledDistance.addX(playerPos.getX() - lastPlayerPos.getX());
-        travelledDistance.addY(playerPos.getY() - lastPlayerPos.getY());
+        travelledDistance.setX(playerPos.getX() - player.getStartingPosition().getX());
         
         calculateFitness();
         
@@ -123,9 +142,10 @@ public class JAR_AIPlayer {
             bestPosX = playerPos.getX();
         }
         
-        double[] netInput = new double[view.length];
-        for (int i = 0; i < netInput.length; i++) {
-            netInput[i] = view[i];
+        double[] netInput = new double[inputBounds * inputBounds];
+        parsedView = parseView(inputBounds);
+        for (int i = 0; i < parsedView.length; i++) {
+            netInput[i] = parsedView[i];
         }
         double[] output = nn.computeNetOutput(netInput);
         int[] intOutput = new int[output.length];
@@ -155,7 +175,6 @@ public class JAR_AIPlayer {
     /**
      * Gives the neural net a specified amount of fitness depending of the progress in the level
      * TODO: proper fitness calculation
-     * @param maxTime longest time alive from any player
      */
     public void calculateFitness() {
         
@@ -223,7 +242,8 @@ public class JAR_AIPlayer {
         lastActionTime = System.currentTimeMillis();
         lastProgressTime = System.currentTimeMillis();
         bestPosX = player.getPosition().getX();
-        //travelledDistance = new Vector2();
+        travelledDistance.setX(0);
+        travelledDistance.setY(0);
         timeNeeded = 0;
     }
 
@@ -263,5 +283,12 @@ public class JAR_AIPlayer {
      */
     public int getNeededTime() {
         return timeNeeded;
+    }
+    
+    /**
+     * Returns the reduced view field of the ai player
+     */
+    public int[] getParsedView() {
+        return parsedView;
     }
 }

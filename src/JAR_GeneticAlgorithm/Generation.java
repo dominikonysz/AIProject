@@ -158,14 +158,20 @@ public class Generation {
      */
     public void computeFitnesses() {
         int counter = 0;
+        NetworkVisualization netVis = NetworkVisualization.getFrame();
         for (JAR_AIPlayer individual : individuals) {
-            game.restart();
-            System.out.println("Player layer: " + counter++ + " | ID: " + individual.getNeuralNet().getNetworkId());
+            System.out.println("Player: " + counter++ + " | ID: " + individual.getNeuralNet().getNetworkId());
             // show the network
-            NetworkVisualization.getFrame(null).updateNetwork(individual.getNeuralNet());
+            if(netVis == null) {
+                netVis = NetworkVisualization.getFrame(individual.getNeuralNet());
+            }
+            else {
+                netVis.updateNetwork(individual.getNeuralNet());
+            }
             // print it into the console
             individual.getNeuralNet().printConstruction();
             game.setAIPlayer(individual);
+            game.restart();
             individual.startProgressDetection();
             while(true) {
                 if(!game.isRunning()) {
@@ -184,7 +190,11 @@ public class Generation {
                         individual.endTurn();
                         break;
                     }
-                    if(game.getPlayer().getPosition().getY() > 1300) {
+                    if(game.getPlayer().getPosition().getX() > game.getLevelBounds().getX()) {
+                        individual.endTurn();
+                        break;
+                    }
+                    if(game.getPlayer().getPosition().getY() > game.getLevelBounds().getY()) {
                         individual.endTurn();
                         break;
                     }

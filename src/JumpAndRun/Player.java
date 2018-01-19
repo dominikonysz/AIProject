@@ -25,23 +25,18 @@ public class Player extends Entity {
     }
     
     private boolean grounded;
-    private Vector2 startPos, bestPos, velocity, maxVelocity, acceleration, newPos;
-    private double xNormal, yNormal;
+    private Vector2 startPos, bestPos, velocity, maxVelocity, acceleration;
     CollisionType[] colType;
     
     public Player(String tag, Vector2 startingPosition, Dimension size) {
         super(tag, startingPosition, size);
         velocity = new Vector2(0, 0);
-        maxVelocity = new Vector2(8, 14);
+        maxVelocity = new Vector2(8, 10);
         acceleration = new Vector2(2, 0.15);
         startPos = new Vector2(startingPosition.getX(), startingPosition.getY());
-        newPos = new Vector2(position.getX(), position.getY());
         
         colType = new CollisionType[] { CollisionType.NONE, CollisionType.NONE };
         grounded = false;
-        
-        xNormal = 0;
-        yNormal = 0;
         
         bestPos = new Vector2(startPos.getX(), startPos.getY());
     }
@@ -98,7 +93,7 @@ public class Player extends Entity {
             velocity.setX(0);
         }
         if(jump && grounded) {
-            velocity.setY(-10);
+            velocity.setY(-9);
         }
         else if(grounded) {
             velocity.setY(0);
@@ -171,7 +166,9 @@ public class Player extends Entity {
      * Sets the velocity to its default value
      */
     public void resetVelocity() {
-        velocity = new Vector2();
+        velocity.setX(0)
+                .setY(0);
+        grounded = false;
     }
     
     /**
@@ -192,6 +189,7 @@ public class Player extends Entity {
      * Resets the players values, which are used to determine the fitness
      */
     public void resetValues() {
-        bestPos = new Vector2(startPos.getX(), startPos.getY());
+        bestPos.setX(startPos.getX())
+                .setY(startPos.getY());
     }
 }

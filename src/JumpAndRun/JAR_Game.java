@@ -37,6 +37,8 @@ public class JAR_Game {
     // how much was the time between the frames bigger than expected
     private double movementPercent;
     
+    private Vector2 levelBounds;
+    
     private JAR_Frame frame;
     
     private static JAR_Game game;
@@ -77,6 +79,18 @@ public class JAR_Game {
         String filePath = "/src/General/Level1.jpg";
         String path = basePath + filePath;
         loadLevelFromImage(path);
+        
+        levelBounds = new Vector2();
+        Vector2 blockPos;
+        for (Entity block : blocks) {
+            blockPos = block.getPosition();
+            if(blockPos.getX() > levelBounds.getX()) {
+                levelBounds.setX(blockPos.getX() + block.getWidth());
+            }
+            if(blockPos.getY() > levelBounds.getY()) {
+                levelBounds.setY(blockPos.getY() + block.getHeight());
+            }
+        }
         
         frame = new JAR_Frame(this);
         // Create window
@@ -216,7 +230,7 @@ public class JAR_Game {
      * @param aiplayer 
      */
     public void setAIPlayer(JAR_AIPlayer aiplayer) {
-    this.aiplayer = aiplayer;
+        this.aiplayer = aiplayer;
     }
     
     /**
@@ -305,5 +319,12 @@ public class JAR_Game {
     public void start() {
         running = true;
         aiplayer.startProgressDetection();
+    }
+    
+    /**
+     * Returns the boundaries of the current level
+     */
+    public Vector2 getLevelBounds() {
+        return levelBounds;
     }
 }
