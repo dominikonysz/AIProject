@@ -184,12 +184,12 @@ public class NeuralNet {
         Random r = new Random();
         
         // Probabilities
-        double probAddNeuron = 0.6;
-            double probNewLayerNeuron = 0.2;
-        double probRemoveNeuron = 0.5;
-        double probAddConnection = 0.85;
-            double probBiasConnection = 0.15;
-        double probRemoveConnection = 0.3;
+        double probAddNeuron = 0.2;
+            double probNewLayerNeuron = 0.15;
+        double probRemoveNeuron = 0.2;
+        double probAddConnection = 0.4;
+            double probBiasConnection = 0.1;
+        double probRemoveConnection = 0.2;
         double probModifyWeights = 0.7;
         double probRepeatProcess = 0.4;
         
@@ -230,15 +230,18 @@ public class NeuralNet {
                     if(layerIndex == 0) {
                         for(Neuron n : iLayer) {
                             int conIndex = 0;
+                            List<Integer> toRemove = new ArrayList<>();
                             for(Connection con : n.getConnections()) {
                                 if(con.getTarget() == null) {
-                                    n.removeConnection(conIndex);
+                                    toRemove.add(conIndex);
                                 }
-                                if(con.getTarget().equals(hLayers.get(layerIndex).get(neuronIndex))) {
-                                    n.removeConnection(conIndex);
-                                    break; // only one connection to target neuron is possible
+                                else if(con.getTarget().equals(hLayers.get(layerIndex).get(neuronIndex))) {
+                                    toRemove.add(conIndex);
                                 }
                                 conIndex++;
+                            }
+                            for(Integer i : toRemove) {
+                                n.removeConnection(i);
                             }
                         }
                     }
@@ -436,9 +439,11 @@ public class NeuralNet {
         for (int i = 0; i < iSize; i++) {
             iLayerCopy[i] = new InputNeuron(i, -1);
             for(Connection con : iLayer[i].getConnections()) {
-                Connection newCon = new Connection(copy.getNeuronByIds(con.getTarget().getId(), con.getTarget().getLayerId()), false);
-                newCon.setWeight(con.getWeight());
-                iLayerCopy[i].addConnection(newCon);
+                if(con.getTarget() != null) {
+                    Connection newCon = new Connection(copy.getNeuronByIds(con.getTarget().getId(), con.getTarget().getLayerId()), false);
+                    newCon.setWeight(con.getWeight());
+                    iLayerCopy[i].addConnection(newCon);
+                }
             }
         }
         copy.iLayer = iLayerCopy;

@@ -62,6 +62,8 @@ public class Connection {
      */
     public void transferOutput(double output) {
         double newInput = output * weight;
-        target.receiveInput(newInput);
+        if(target != null) {
+            target.receiveInput(newInput);
+        }
     }
 }

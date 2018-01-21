@@ -22,7 +22,7 @@ public class Generation {
     private int id, size;
     JAR_AIPlayer[] individuals;
     JAR_Game game;
-    int maxFitness;
+    int maxFitness, averageFitness;
     
     /**
      * Creates a completely new generation with given parameters
@@ -47,6 +47,7 @@ public class Generation {
         }
         
         maxFitness = 0;
+        averageFitness = 0;
         System.out.println("New Generation [" + id + "|" + size + "]");
     }
     
@@ -77,6 +78,7 @@ public class Generation {
             individuals[i] = new JAR_AIPlayer(topQuart[i%topQuart.length]);
         }
         maxFitness = 0;
+        averageFitness = 0;
     }
     
     /**
@@ -99,6 +101,7 @@ public class Generation {
     private void sortIndividuals() {
         quickSort(0, size-1);
         maxFitness = individuals[individuals.length - 1].getFitness();
+        calculateAverageFitness();
         System.out.println("GENERATION BEST: " + individuals[individuals.length - 1].getFitness()
                             + " by ID: " + individuals[individuals.length - 1].getNeuralNet().getNetworkId());
     }
@@ -151,6 +154,40 @@ public class Generation {
         JAR_AIPlayer temp = individuals[i];
         individuals[i] = individuals[j];
         individuals[j] = temp;
+    }
+
+    /**
+     * Returns the fitness of the 'fittest' individual in the generation
+     * @return 
+     */
+    public int getMaxFitness() {
+        return maxFitness;
+    }
+    
+    /**
+     * Calculates the average fitness of the generations individuals
+     */
+    private void calculateAverageFitness() {
+        int cumulated = 0;
+        for(JAR_AIPlayer player : individuals) {
+            cumulated += player.getFitness();
+        }
+        averageFitness = cumulated / size;
+    }
+    
+    /**
+     * Returns the average fitness of the generations individuals
+     */
+    public int getAverageFitness() {
+        return averageFitness;
+    }
+
+    /**
+     * Returns the generations size
+     * @return 
+     */
+    public int getSize() {
+        return size;
     }
     
     /**

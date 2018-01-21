@@ -18,6 +18,7 @@ import javax.swing.KeyStroke;
 
 /**
  *  Displays a given neural network in a new window
+ * only suitable for JAR games, because of the quadratic layout of the input
  * @author Dominik Onyszkiewicz
  */
 public class NetworkVisualization extends JFrame {

@@ -16,11 +16,13 @@ import java.util.List;
 public class GenerationManager {
     private List<Generation> generations;
     private int generationSize;
+    private GenerationAnalysis genAna;
     
     public GenerationManager() {
         generations = new ArrayList<Generation>();
-        generationSize = 20;
+        generationSize = 12;
         generations.add(new Generation(0, generationSize));
+        genAna = new GenerationAnalysis(this);
     }
     
     public void run() {
@@ -28,8 +30,13 @@ public class GenerationManager {
             while(true) {
                 Generation gen = generations.get(generations.size() - 1);
                 gen.computeFitnesses();
+                genAna.repaint();
                 generations.add(new Generation(gen));
             }
         }
+    }
+    
+    public List<Generation> getGenerations() {
+        return generations;
     }
 }
