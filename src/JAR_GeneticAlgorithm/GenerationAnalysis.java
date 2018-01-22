@@ -60,7 +60,6 @@ public class GenerationAnalysis extends JFrame {
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            System.out.println("REPAINT");
             int maxFitness = 1;
             List<Generation> generations = genMan.getGenerations();
             for(Generation gen : generations) {
@@ -68,11 +67,19 @@ public class GenerationAnalysis extends JFrame {
                     maxFitness = gen.getMaxFitness();
                 }
             }
+            
+            int genAmount = generations.size() - 1;
+            Vector2 scale = new Vector2(diaSize.getX() / genAmount, diaSize.getY() / maxFitness);
+            
             g.drawLine(0, 0, 0, diaSize.getIntY());
             g.drawLine(0, diaSize.getIntY(), diaSize.getIntX(), diaSize.getIntY());
             
-            int genAmount = generations.size();
-            Vector2 scale = new Vector2(diaSize.getX() / genAmount, diaSize.getY() / maxFitness);
+            for (int i = 1000; i < maxFitness; i += 1000) {
+                g.drawLine(0, yCoordinate((int) Math.round(i * scale.getY())), 3, yCoordinate((int) Math.round(i * scale.getY())));
+            }
+            for (int i = 1; i < genAmount; i++) {
+                g.drawLine((int) Math.round(i * scale.getX()), yCoordinate(0), (int) Math.round(i * scale.getX()), yCoordinate(3));
+            }
 
             int[] xPoint = new int[genAmount];
             for (int i = 0; i < xPoint.length; i++) {
@@ -82,9 +89,9 @@ public class GenerationAnalysis extends JFrame {
                 g.setColor(Color.GREEN);
                 g.drawLine(0, yCoordinate(0), scale.getIntX(), yCoordinate((int) Math.round(generations.get(0).getMaxFitness() * scale.getY())));
                 g.setColor(Color.BLUE);
-                g.drawLine(0, yCoordinate(0), scale.getIntX(), yCoordinate((int) Math.round(generations.get(0).getMaxFitness() / generations.get(0).getSize() * scale.getY())));
+                g.drawLine(0, yCoordinate(0), scale.getIntX(), yCoordinate((int) Math.round(generations.get(0).getAverageFitness() * scale.getY())));
             }
-            for (int i = 0; i < genAmount - 2; i++) {
+            for (int i = 0; i < genAmount - 1; i++) {
                 g.setColor(Color.GREEN);
                 g.drawLine((i + 1) * scale.getIntX(), yCoordinate((int) Math.round(generations.get(i).getMaxFitness() * scale.getY())), 
                         (i + 2) * scale.getIntX(), yCoordinate((int) Math.round(generations.get(i + 1).getMaxFitness() * scale.getY())));
