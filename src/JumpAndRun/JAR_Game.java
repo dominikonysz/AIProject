@@ -75,35 +75,23 @@ public class JAR_Game {
         blocks.get(18).setPosition(new Vector2(250, 270));
         blocks.get(19).setPosition(new Vector2(200, 370));*/
         
-        String basePath = new File("").getAbsolutePath();
-        String filePath = "/src/General/Level1.jpg";
-        String path = basePath + filePath;
-        loadLevelFromImage(path);
+        // toggle to activate/deactivate the ai player
+        aiactive = true;
+        left = false;
+        right = false;
+        jump = false;
         
         levelBounds = new Vector2();
-        Vector2 blockPos;
-        for (Entity block : blocks) {
-            blockPos = block.getPosition();
-            if(blockPos.getX() > levelBounds.getX()) {
-                levelBounds.setX(blockPos.getX() + block.getWidth());
-            }
-            if(blockPos.getY() > levelBounds.getY()) {
-                levelBounds.setY(blockPos.getY() + block.getHeight());
-            }
-        }
+        loadLevel(0);
         
         frame = new JAR_Frame(this);
+        
         // Create window
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(750, 750));
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         
-        // toggle to activate/deactivate the ai player
-        aiactive = true;
-        left = false;
-        right = false;
-        jump = false;
     }
     
     /**
@@ -326,5 +314,43 @@ public class JAR_Game {
      */
     public Vector2 getLevelBounds() {
         return levelBounds;
+    }
+    
+    /**
+     * Sets the currently playable level to the level indicated by the given id
+     */
+    public void loadLevel(int id) {
+        String filePath;
+        System.out.println("LOADING LEVEL: " + id);
+        switch(id)
+        {
+            case 1:
+                filePath = "/src/General/Level1.jpg";
+                break;
+            case 2:
+                filePath = "/src/General/Level2.jpg";
+                break;
+            case 3:
+                filePath = "/src/General/Level3.jpg";
+                break;
+            default:
+                filePath = "/src/General/Level2.jpg";
+                break;
+        }
+        
+        String basePath = new File("").getAbsolutePath();
+        String path = basePath + filePath;
+        loadLevelFromImage(path);
+        
+        Vector2 blockPos;
+        for (Entity block : blocks) {
+            blockPos = block.getPosition();
+            if(blockPos.getX() > levelBounds.getX()) {
+                levelBounds.setX(blockPos.getX() + block.getWidth());
+            }
+            if(blockPos.getY() > levelBounds.getY()) {
+                levelBounds.setY(blockPos.getY() + block.getHeight());
+            }
+        }
     }
 }

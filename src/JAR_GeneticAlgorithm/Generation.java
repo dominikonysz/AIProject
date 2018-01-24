@@ -42,7 +42,7 @@ public class Generation {
             individuals[i] = new JAR_AIPlayer();
             // mutate the new neurals nets 5 times to begin with something
             for (int j = 0; j < 5; j++) {
-            individuals[i].getNeuralNet().mutate(1);
+                individuals[i].getNeuralNet().mutate(1);
             }
         }
         

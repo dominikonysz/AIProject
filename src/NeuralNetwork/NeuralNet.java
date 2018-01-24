@@ -189,8 +189,8 @@ public class NeuralNet {
         double probRemoveNeuron = 0.2;
         double probAddConnection = 0.7;
             double probBiasConnection = 0.1;
-        double probRemoveConnection = 0.1;
-        double probModifyWeights = 0.7;
+        double probRemoveConnection = 0.3;
+        double probModifyWeights = 0.8;
         double probRepeatProcess = 0.4;
         
         // Allow multiple changes on network structure

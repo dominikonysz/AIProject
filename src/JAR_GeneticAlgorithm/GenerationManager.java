@@ -20,7 +20,7 @@ public class GenerationManager {
     
     public GenerationManager() {
         generations = new ArrayList<Generation>();
-        generationSize = 12;
+        generationSize = 20;
         generations.add(new Generation(0, generationSize));
         genAna = new GenerationAnalysis(this);
     }

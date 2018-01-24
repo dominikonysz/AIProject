@@ -6,8 +6,11 @@
 package NeuralNetwork;
 
 import JumpAndRun.JAR_Game;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -30,7 +33,7 @@ public class NetworkVisualization extends JFrame {
     
     private NetworkVisualization(NeuralNet neuralNet) {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(600, 350);
+        this.setSize(700, 450);
         this.setLocation(0, 0);
         this.setVisible(true);
         
@@ -93,7 +96,9 @@ public class NetworkVisualization extends JFrame {
             
             idLabel.setText("Network ID: " + nn.getNetworkId() + " | Fitness: " + nn.getFitness());
             
-            int inputNeuronXOffset = 30, xOffset = 60, yOffset = 30, neuronSize = 14;
+            Graphics2D g2 = (Graphics2D) g;
+            
+            int xOffset = 60, yOffset = 50, neuronSize = 14, inputNeuronXOffset = yOffset;
             this.setSize(visual.getWidth(), (nn.iLayer.length + 2) * yOffset);
             
             int neuronX, neuronY;
@@ -134,6 +139,7 @@ public class NetworkVisualization extends JFrame {
                     else if(con.getWeight() < 0) {
                         g.setColor(Color.RED);
                     }
+                    g2.setStroke(new BasicStroke(Math.abs((float) con.getWeight())));
                     Neuron target = con.getTarget();
                     if(target != null) {
                         int targetX = target.getLayerId() == Integer.MAX_VALUE ? nn.hLayers.size() : target.getLayerId();
@@ -153,8 +159,6 @@ public class NetworkVisualization extends JFrame {
             // hidden layers
             for (int i = 0; i < nn.hLayers.size(); i++) {
                 for(int j = 0; j < nn.hLayers.get(i).size(); j++) {
-                    // TODO: change the layout of the displayed neural net
-                    
                     int layerSize = nn.hLayers.get(i).size();
                     double diff = (inputBound - layerSize) / 2;
                     int pixelDiff = (int) Math.round(diff * yOffset);
@@ -163,6 +167,7 @@ public class NetworkVisualization extends JFrame {
                     neuronY = (j+1) * yOffset + pixelDiff;
                     // neuron
                     double neuronOut = nn.hLayers.get(i).get(j).getNeuronOutput();
+                    g2.setStroke(new BasicStroke(1));
                     g.setColor(new Color(0.55f, 0.55f, 0.55f));
                     g.drawRect(neuronX, neuronY, neuronSize, neuronSize);
                     g.setColor(new Color((float) (1 - neuronOut), (float) (1 - neuronOut), (float) (1 - neuronOut)));
@@ -177,6 +182,7 @@ public class NetworkVisualization extends JFrame {
                         else if(con.getWeight() < 0) {
                             g.setColor(Color.RED);
                         }
+                        g2.setStroke(new BasicStroke(Math.abs((float) con.getWeight())));
                         Neuron target = con.getTarget();
                         int targetX = target.getLayerId() == Integer.MAX_VALUE ? nn.hLayers.size() : target.getLayerId();
                         targetX = ((inputBound + 1) * inputNeuronXOffset) + ((targetX+1) * xOffset);

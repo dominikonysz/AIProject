@@ -57,7 +57,7 @@ public class JAR_AIPlayer {
         parsedView = new int[inputBounds * inputBounds];
         
         nn = base.getNeuralNet().getCopy();
-        nn.mutate(0.7);
+        nn.mutate(1);
         
         player = game.getPlayer();
         bestPosX = player.getPosition().getX();

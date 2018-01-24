@@ -8,10 +8,14 @@ package JumpAndRun;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.KeyStroke;
 
 /**
  *  Manages the visual representation and interaction of the game
@@ -45,6 +49,28 @@ public class JAR_Frame extends JFrame {
         for(Entity block : game.getBlocks()) {
             screen.add(block.getLabel());
         }
+        
+        screen.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('1'), "L1");
+        screen.getActionMap().put("L1", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.loadLevel(1);
+            }
+        });
+        screen.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('2'), "L2");
+        screen.getActionMap().put("L2", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.loadLevel(2);
+            }
+        });
+        screen.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('3'), "L3");
+        screen.getActionMap().put("L3", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.loadLevel(3);
+            }
+        });
     }
     
     //<editor-fold defaultstate="collapsed" desc="button state getter">
