@@ -77,6 +77,7 @@ public class WorkingNeuron extends Neuron {
             // sigmoid function
             output = (1 / (1 + Math.exp(-x)));
         }
+        input = 0;
         return output;
     }
     

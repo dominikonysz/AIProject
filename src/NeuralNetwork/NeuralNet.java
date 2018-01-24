@@ -187,9 +187,9 @@ public class NeuralNet {
         double probAddNeuron = 0.2;
             double probNewLayerNeuron = 0.15;
         double probRemoveNeuron = 0.2;
-        double probAddConnection = 0.4;
+        double probAddConnection = 0.7;
             double probBiasConnection = 0.1;
-        double probRemoveConnection = 0.2;
+        double probRemoveConnection = 0.1;
         double probModifyWeights = 0.7;
         double probRepeatProcess = 0.4;
         
